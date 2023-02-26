@@ -3,9 +3,14 @@ from .models import AllProducts
 from .serializers import AllProductSerializer
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 
 class ProductViewSet(viewsets.ViewSet):
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticated]
+
     def list(self, request):
         try:
             products = AllProducts.objects.all()
@@ -34,7 +39,8 @@ class ProductViewSet(viewsets.ViewSet):
     def update(self, request, pk=None):
         try:
             product = AllProducts.objects.get(id=pk)
-            product_data = AllProductSerializer(product, data=request.data, partial=True)
+            product_data = AllProductSerializer(
+                product, data=request.data, partial=True)
             product_data.is_valid(raise_exception=True)
             product_data.save()
             return Response(product_data.data, status=status.HTTP_202_ACCEPTED)
@@ -45,6 +51,6 @@ class ProductViewSet(viewsets.ViewSet):
         try:
             product = AllProducts.objects.get(id=pk)
             product.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response({'message': 'Success'}, status=status.HTTP_204_NO_CONTENT)
         except:
             return Response({'message': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
