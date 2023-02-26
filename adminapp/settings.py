@@ -48,6 +48,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'adminapp.csrfmiddleware.CsrfHeaderMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -137,3 +138,5 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
    ),
 }
+
+CSRF_COOKIE_LENGTH = 32
